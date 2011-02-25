@@ -1,10 +1,9 @@
 from django import forms
 from dds.models import Subscription
 
-class SubscribeForm(forms.ModelForm):
-    class Meta:
-        model = Subscription
-        fields = ('email', 'food',)
+class SubscribeForm(forms.Form):
+    email = forms.EmailField()
+    food = forms.CharField()
 
 class DDSForm(forms.Form):
     food = forms.CharField()

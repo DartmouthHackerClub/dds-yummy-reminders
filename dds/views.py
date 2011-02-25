@@ -1,18 +1,24 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-#from django.contrib.auth.decorators import login_required
-#from django.contrib.auth.models import User
 from dds.forms import DDSForm
 from dds.forms import SubscribeForm
 from dds.models import Subscription
+from django.core.mail import send_mail
 import urllib2
 
 def subscribe(request):
-    if request.method == 'POST':
-        form = SubscribeForm()
+    if request.POST:
+        form = SubscribeForm(request.POST)
         if form.is_valid():
-            return HttpResponse('thanks')
+            s = Subscription()
+            s.food = form.cleaned_data['food']
+            s.email = form.cleaned_data['email']
+            s.save()
 
+            send_mail('subscription added', 'Your subscription to DDS was added', 'hacktown@dartmouth.edu','typppo@gmail.com', fail_silently=False)
+            return HttpResponse('thanks')
+        else:
+            return HttpResponse('invalid')
     else:
         form = SubscribeForm()
 

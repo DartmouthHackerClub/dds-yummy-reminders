@@ -45,4 +45,4 @@ def isThere(nomName):
 	def isRightNom(x): return stringInString(nomName,x[0])
 	return filter(isRightNom, noms)
 
-print isThere("chicken")
+#print isThere("chicken")
