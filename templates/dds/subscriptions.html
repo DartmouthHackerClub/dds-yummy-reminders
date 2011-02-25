@@ -1,0 +1,9 @@
+<form action="/scrape/subscriptions/" method="post"<
+{{form}}
+</form>
+
+<ul>
+{% for subscription in subscriptions %}
+    <li>{{subscription.food}}</li>
+{% endfor %}
+</ul>
