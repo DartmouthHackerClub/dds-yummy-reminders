@@ -1,21 +1,31 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from forms import DDSForm
+#from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.models import User
+from dds.forms import DDSForm
+from dds.forms import SubscribeForm
+from dds.models import Subscription
 import urllib2
 
-@login_required
-def subscriptions(request):
-    # add form
-    subs = request.User.get_profile().subscription_set.objects.all()
+def subscribe(request):
+    if request.method == 'POST':
+        form = SubscribeForm()
+        if form.is_valid():
+            return HttpResponse('thanks')
 
-    # list subs
+    else:
+        form = SubscribeForm()
 
     return render_to_response('dds/subscriptions.html', {
         'form':form,
-        'subscriptions':subs,
     })
+
+def unsubscribe(request, email, id):
+    subscription = Subscription.objects.get(pk=id, email=email)
+    if subscription != None:
+        subscription.delete()
+        HttpResponse('Removed')
+    HttpResponse('Removal failed')
 
 def generaltso(request):
     html = urllib2.urlopen('http://www.dartmouth.edu/dining/').read()

@@ -37,9 +37,12 @@ def noms():
 
 def stringInString(needle, haystack):
 	return haystack.lower().find(needle.lower()) > -1
+
+noms = noms()
 		
 def isThere(nomName):
+	global noms
 	def isRightNom(x): return stringInString(nomName,x[0])
-	return filter(isRightNom, noms())
+	return filter(isRightNom, noms)
 
 print isThere("chicken")
