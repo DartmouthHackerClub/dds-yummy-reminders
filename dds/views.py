@@ -16,6 +16,7 @@ def subscribe(request):
             s.save()
 
             send_mail('subscription added', 'Your subscription to DDS was added', 'hacktown@dartmouth.edu','typppo@gmail.com', fail_silently=False)
+
             return HttpResponse('thanks')
         else:
             return HttpResponse('invalid')
