@@ -4,6 +4,7 @@ from dds.forms import DDSForm
 from dds.forms import SubscribeForm
 from dds.models import Subscription
 from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
 import urllib2
 
 def subscribe(request):
@@ -15,8 +16,8 @@ def subscribe(request):
             s.email = form.cleaned_data['email']
             s.save()
 
-            send_mail('subscription added', 'Your subscription to DDS was added', 'hacktown@dartmouth.edu','typppo@gmail.com', fail_silently=False)
-
+            text = 'Your subscription to %s was added.' % (s.food)
+            send_mail('subscription added', text, 'hacktown@dartmouth.edu', [s.food], fail_silently=False)
             return HttpResponse('thanks')
         else:
             return HttpResponse('invalid')
@@ -28,11 +29,12 @@ def subscribe(request):
     })
 
 def unsubscribe(request, email, id):
-    subscription = Subscription.objects.get(pk=id, email=email)
-    if subscription != None:
+    try:
+        subscription = Subscription.objects.get(pk=id, email=email)
         subscription.delete()
-        HttpResponse('Removed')
-    HttpResponse('Removal failed')
+        return HttpResponse('Removed')
+    except ObjectDoesNotExist:
+        return HttpResponse('Removal failed')
 
 def generaltso(request):
     html = urllib2.urlopen('http://www.dartmouth.edu/dining/').read()
