@@ -1,3 +1,5 @@
+from random import choice
+import string
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from dds.forms import DDSForm
@@ -14,11 +16,12 @@ def subscribe(request):
             s = Subscription()
             s.food = form.cleaned_data['food']
             s.email = form.cleaned_data['email']
+            s.tag = ''.join([choice(string.letters + string.digits) for i in range(10)])
             s.save()
 
             text = 'Your subscription to %s was added.' % (s.food)
-            send_mail('subscription added', text, 'hacktown@dartmouth.edu', [s.food], fail_silently=False)
-            return HttpResponse('thanks')
+            send_mail('subscription added', text, 'hacktown@dartmouth.edu', [s.email], fail_silently=False)
+            return HttpResponse('thanks - unsubscribe <a href="%s">here</a>' % (s.unsubscribe_link()))
         else:
             return HttpResponse('invalid')
     else:
@@ -28,9 +31,9 @@ def subscribe(request):
         'form':form,
     })
 
-def unsubscribe(request, email, id):
+def unsubscribe(request, email, tag):
     try:
-        subscription = Subscription.objects.get(pk=id, email=email)
+        subscription = Subscription.objects.get(email=email, tag=tag)
         subscription.delete()
         return HttpResponse('Removed')
     except ObjectDoesNotExist:

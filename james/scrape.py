@@ -1,5 +1,5 @@
-# INTENSE SCRAPING ACTION BY JAMES
 #!/usr/bin/env python
+# INTENSE SCRAPING ACTION BY JAMES
 
 import urllib2, urllib, webbrowser
 from BeautifulSoup import BeautifulSoup
