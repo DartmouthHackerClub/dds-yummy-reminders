@@ -1,42 +1,34 @@
 #!/usr/bin/env python
 
-import dds_scrape
+import scrape
 from django.core.mail import send_mail
-from django.conf import settings
 from dds.models import Subscription
 
 FROM_EMAIL = 'hacktown-noreply@hacktown.cs.dartmouth.edu'
     
 prev_sub = None
-body = []
-subject = []
 
 # Subscriptions: [email, food]
 # mimics nested for loops to minimize queries
 for sub in Subscription.objects.all().order_by('email'):
     if prev_sub != None and sub.email != prev_sub.email:
         if body:
-            mail(subject, body, prev_sub.email)
+            send_mail("[DDS TODAY]: "+", ".join(subject), '\n'.join(body), FROM_EMAIL, [sub.email])
         body = []
         subject = []
+        prev_sub = sub
+            
 
-    items = dds_scrape.isThere(sub.food.encode('utf-8'))
+    items = scrape.isThere(sub.food)
     
     if items:
         # sorry this is a little hacky/sloppy/whatever
-        subject.append(sub.food.lower())
         body.append("%s! YOUR FAVORITE!" % (sub.food.upper(),))
         body.extend(["%s @ %s [%s]" %  (food, loc, cat) for food,cat,loc in items])
-        body.append("\n\n") #add a filler line to seperate query terms
-
-    prev_sub = sub
-            
+        body.append("") #add a filler line to seperate query terms
+        subject.append(sub.food.lower())
+        body.append("---\nThis is a service of Hacker Club. To unsubscribe, go here:")
+        body.append(sub.unsubscribe_link())
 
 if body:
-    mail(subject, body, prev_sub.email)
-
-def mail(subj, bod, to):
-    body.append("---\nThis is a service of Hacker Club. To unsubscribe, go here:")
-    body.append(sub.unsubscribe_link())
-    send_mail("[DDS TODAY]: "+", ".join(subj), '\n'.join(bod), FROM_EMAIL, [to])
-    print 'sent mail to', prev_sub.email
+    send_mail("[DDS TODAY]: "+", ".join(subject), '\n'.join(body), FROM_EMAIL, [prev_sub.email])

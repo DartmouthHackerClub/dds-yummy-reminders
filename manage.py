@@ -1,5 +1,14 @@
 #!/usr/bin/python
+import sys
 from django.core.management import execute_manager
+
+path = '/var/www'
+if path not in sys.path:
+    sys.path.append(path)
+path = '/var/www/scrape'
+if path not in sys.path:
+    sys.path.append(path)
+
 try:
     import settings # Assumed to be in the same directory.
 except ImportError:
