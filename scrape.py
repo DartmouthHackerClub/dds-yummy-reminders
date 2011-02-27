@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# INTENSE SCRAPING ACTION BY JAMES
-
 import urllib2, urllib, webbrowser
 from BeautifulSoup import BeautifulSoup
 import re
@@ -45,4 +42,4 @@ def isThere(nomName):
 	def isRightNom(x): return stringInString(nomName,x[0])
 	return filter(isRightNom, noms)
 
-#print isThere("chicken")
+print isThere("chicken")

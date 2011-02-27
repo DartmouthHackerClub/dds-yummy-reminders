@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from james.scrape import isThere
+import scrape
 from django.core.mail import send_mail
 from dds.models import Subscription
 
@@ -19,7 +19,7 @@ for sub in Subscription.objects.all().order_by('email'):
         prev_sub = sub
             
 
-    items = isThere(sub.food)
+    items = scrape.isThere(sub.food)
     
     if items:
         # sorry this is a little hacky/sloppy/whatever
