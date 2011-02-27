@@ -9,4 +9,4 @@ class Subscription(models.Model):
         return '%s subscribed to %s' % (self.email, self.food)
 
     def unsubscribe_link(self):
-        return 'http://hacktown.cs.dartmouth.edu/scrape/dds/unsubscribe/%s/%s' % (self.email, self.tag)
+        return 'http://hacktown.cs.dartmouth.edu/dds/app/unsubscribe/%s/%s' % (self.email, self.tag)

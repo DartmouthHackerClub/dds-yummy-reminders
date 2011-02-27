@@ -5,12 +5,14 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    (r'^scrape/dds/', include('scrape.dds.urls')),
-
     # Uncomment the admin/doc line below to enable admin documentation:
-    (r'^scrape/admin/doc/', include('django.contrib.admindocs.urls')),
+#    (r'^dds/admin/doc/', include('django.contrib.admindocs.urls')),
+
+    #(r'^dds/', 'scrape.dds.views.subscribe'),
 
     # Uncomment the next line to enable the admin:
-    (r'^scrape/admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin.site.urls)),
+
+    # Example:
+    (r'^app/', include('scrape.dds.urls')),
 )

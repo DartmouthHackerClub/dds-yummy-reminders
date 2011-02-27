@@ -1,5 +1,16 @@
-<form action="/scrape/dds/subscribe" method="post">
+{%extends "base.html"%}
+{%block title%}subscribe{%endblock%}
+
+{%block header%}Subscribe{%endblock%}
+
+{%block content%}
+<p>
+Every night we'll check if DDS is serving something the next day that matches your subscription.  If so, you'll get an email.  These emails will let you unsubscribe if you're no longer interested.
+</p>
+
+<form action="/dds/app/subscribe/" method="post">
 {{form.as_p}}
 <br>
 <input type="submit" value="Save"/>
 </form>
+{%endblock%}

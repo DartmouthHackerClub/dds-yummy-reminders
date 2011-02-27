@@ -9,7 +9,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-
+"""
 LOGIN_URL = '/scrape/login'
 LOGIN_REDIRECT_URL = '/scrape'
 
@@ -17,11 +17,12 @@ ACCOUNT_ACTIVATION_DAYS = 7
 EMAIL_HOST = 'localhost'
 DEFAULT_FROM_EMAIL = 'webmaster@hacktown.cs.dartmouth.edu'
 LOGIN_REDIRECT_URL = '/scrape/'
+"""
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db.sql',                      # Or path to database file if using sqlite3.
+        'NAME': '/var/www/scrape/db.sql',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
