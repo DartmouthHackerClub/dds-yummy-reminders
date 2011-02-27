@@ -7,8 +7,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 def blitz(address, subject, text):
-
-	me = "Hacktown <james.a.murdza@dartmouth.edu>"
+	me = "Hacktown <hacktown-noreply@hacktown.cs.dartmouth.edu>"
 	you = address
 	msg = MIMEText(text)
 
