@@ -3,7 +3,11 @@
 
 {%block header%}Subscribe{%endblock%}
 
+
 {%block content%}
+{%if comment%}
+<strong>{{comment}}</strong>
+{%endif%}
 <p>
 Every night we'll check if DDS is serving something the next day that matches your subscription.  If so, you'll get an email.  These emails will let you unsubscribe if you're no longer interested.
 </p>

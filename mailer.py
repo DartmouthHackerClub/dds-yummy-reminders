@@ -11,6 +11,12 @@ prev_sub = None
 body = []
 subject = []
 
+def mail(subj, bod, to):
+    body.append("---\nThis is a service of Hacker Club. To unsubscribe, go here:")
+    body.append(sub.unsubscribe_link())
+    send_mail("[DDS TODAY]: "+", ".join(subj), '\n'.join(bod), FROM_EMAIL, [to])
+    print 'sent mail to', prev_sub.email
+
 # Subscriptions: [email, food]
 # mimics nested for loops to minimize queries
 for sub in Subscription.objects.all().order_by('email'):
@@ -27,16 +33,10 @@ for sub in Subscription.objects.all().order_by('email'):
         subject.append(sub.food.lower())
         body.append("%s! YOUR FAVORITE!" % (sub.food.upper(),))
         body.extend(["%s @ %s [%s]" %  (food, loc, cat) for food,cat,loc in items])
-        body.append("\n\n") #add a filler line to seperate query terms
+        body.append("") #filler line to seperate query terms
 
     prev_sub = sub
-            
 
+# last mail
 if body:
     mail(subject, body, prev_sub.email)
-
-def mail(subj, bod, to):
-    body.append("---\nThis is a service of Hacker Club. To unsubscribe, go here:")
-    body.append(sub.unsubscribe_link())
-    send_mail("[DDS TODAY]: "+", ".join(subj), '\n'.join(bod), FROM_EMAIL, [to])
-    print 'sent mail to', prev_sub.email

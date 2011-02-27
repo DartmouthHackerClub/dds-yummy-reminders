@@ -21,9 +21,15 @@ def subscribe(request):
 
             text = 'Your subscription to %s was added.' % (s.food)
             send_mail('subscription added', text, 'hacktown@dartmouth.edu', [s.email], fail_silently=False)
-            return HttpResponse('thanks - unsubscribe <a href="%s">here</a>' % (s.unsubscribe_link()))
+            return render_to_response('dds/subscriptions.html', {
+                'form':form,
+                'comment':'thanks - unsubscribe <a href="%s">here</a>' % (s.unsubscribe_link())
+            })
         else:
-            return HttpResponse('invalid')
+            return render_to_response('dds/subscriptions.html', {
+                'form':form,
+                'comment':'invalid entry',
+            })
     else:
         form = SubscribeForm()
 
