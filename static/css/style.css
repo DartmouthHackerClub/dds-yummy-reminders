@@ -11,13 +11,18 @@ body{
     font-family: arial;
     border: 1px gray;
     background-color: #f5f5f5;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
 }
 
 h1{
+    border-radius: 5px;
+    -moz-border-radius: 5px;
     margin: 0;
     border-bottom: 1px gray solid;
     background-color: #dedede;
     padding: 0 5px 0 5px;
+    color: #454545;
     
 }
 

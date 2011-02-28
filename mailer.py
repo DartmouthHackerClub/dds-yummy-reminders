@@ -12,8 +12,10 @@ body = []
 subject = []
 
 def mail(subj, bod, to):
-    body.append("---\nThis is a service of Hacker Club. To unsubscribe, go here:")
+    body.append("---\nThis is a service of Hacker Club. To unsubscribe from this foot item, go here:")
     body.append(sub.unsubscribe_link())
+    body.append("To unsubscribe from all notifications:")
+    body.append(sub.unsubscribe_all_link())
     send_mail("[DDS TODAY]: "+", ".join(subj), '\n'.join(bod), FROM_EMAIL, [to])
     print 'sent mail to', prev_sub.email
 

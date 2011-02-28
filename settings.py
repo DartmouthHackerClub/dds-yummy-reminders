@@ -3,6 +3,11 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# path stuff
+ABS_PATH_TO_THIS_REPO = '/var/www/scrape/'
+STATIC_DOC_ROOT = ABS_PATH_TO_THIS_REPO + 'static/'
+
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -18,6 +23,8 @@ EMAIL_HOST = 'localhost'
 DEFAULT_FROM_EMAIL = 'webmaster@hacktown.cs.dartmouth.edu'
 LOGIN_REDIRECT_URL = '/scrape/'
 """
+
+
 
 DATABASES = {
     'default': {

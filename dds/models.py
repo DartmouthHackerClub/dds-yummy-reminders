@@ -10,3 +10,6 @@ class Subscription(models.Model):
 
     def unsubscribe_link(self):
         return 'http://hacktown.cs.dartmouth.edu/dds/app/unsubscribe/%s/%s' % (self.email, self.tag)
+
+    def unsubscribe_all_link(self):
+        return 'http://hacktown.cs.dartmouth.edu/dds/app/unsubscribe_all/%s/%s' % (self.email, self.tag)
