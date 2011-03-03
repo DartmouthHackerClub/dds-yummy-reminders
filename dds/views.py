@@ -1,35 +1,49 @@
-from random import choice
 import string
+import urllib2
+from random import choice
+
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
+
 from dds.forms import DDSForm
 from dds.forms import SubscribeForm
 from dds.models import Subscription
-from django.core.mail import send_mail
-from django.core.exceptions import ObjectDoesNotExist
-import urllib2
+from dds.transforms import AUTOCORRECT
 
 def subscribe(request):
     if request.POST:
         form = SubscribeForm(request.POST)
         if form.is_valid():
-            s = Subscription()
-            s.food = form.cleaned_data['food']
-            s.email = form.cleaned_data['email']
-            s.tag = ''.join([choice(string.letters + string.digits) for i in range(6)])
-            s.save()
-
-            text = 'Your subscription to %s was added.\nYou can unsubscribe from this food item at: %s\n or cancel all your subscriptions at: %s' % (s.food, s.unsubscribe_link(), s.unsubscribe_all_link())
-            send_mail('subscription added', text, 'hacktown-noreply@hacktown.cs.dartmouth.edu', [s.email], fail_silently=False)
-            return render_to_response('dds/subscriptions.html', {
-                'form':form,
-                'comment':'thanks, your subscription was entered',
-            })
-        else:
-            return render_to_response('dds/subscriptions.html', {
-                'form':form,
-                'comment':'invalid entry',
-            })
+            email = form.cleaned_data['email']
+            food = form.cleaned_data['food'].split(',')
+            text = ["The following subscriptions were added for %s:" % (email,)]
+            last_sub = None
+            for item in food:  # give each item (comma-delimited) a separate subscription
+                item = item.strip().lower()
+                if item: # ignore empty strings (or purely whitespace strings)
+                    s = Subscription()
+                    s.food = AUTOCORRECT[item] if item in AUTOCORRECT else item
+                    s.email = email
+                    s.tag = ''.join([choice(string.letters + string.digits) for i in range(10)])
+                    s.save()
+                    text.append('%s (cancel here: %s)' % (s.food.lower(), s.unsubscribe_link())) 
+                    last_sub = s
+           
+            if last_sub != None: 
+                text.append('\n cancel all subscriptions: %s' % (last_sub.unsubscribe_all_link()))
+                send_mail('subscription added', '\n'.join(text), 'hacktown@dartmouth.edu', [email], fail_silently=False)
+                return render_to_response('dds/subscriptions.html', {
+                    'form':form,
+                    'comment':'thanks, your subscription was entered',
+                })
+        
+        # else if form's invalid or last_sub = None    
+        return render_to_response('dds/subscriptions.html', {
+            'form':form,
+            'comment':'invalid entry',
+        })
     else:
         form = SubscribeForm()
 
@@ -39,9 +53,10 @@ def subscribe(request):
 
 def unsubscribe(request, email, tag):
     try:
-        subscription = Subscription.objects.get(email=email, tag=tag)
+        subscription = Subscription.objects.get(email=email, tag=tag) 
+        text = 'Removed subscription: %s' % (subscription.food.lower())
         subscription.delete()
-        return HttpResponse('Removed successfully')
+        return HttpResponse(text)
     except ObjectDoesNotExist:
         return HttpResponse('Removal failed - contact hacker club')
 
@@ -52,7 +67,6 @@ def unsubscribe_all(request, email, tag):
         subscriptions = Subscription.objects.filter(email=email)
         for sub in subscriptions:
             sub.delete()
-
         return HttpResponse('Removed all your subscriptions successfully')
     except ObjectDoesNotExist:
         return HttpResponse('Removal failed - contact hacker club')

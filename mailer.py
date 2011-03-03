@@ -12,14 +12,13 @@ body = []
 subject = []
 
 def mail(subj, bod, to):
-    body.append("---\nThis is a service of Hacker Club. To unsubscribe from this foot item, go here:")
-    body.append(sub.unsubscribe_link())
-    body.append("To unsubscribe from all notifications:")
-    body.append(sub.unsubscribe_all_link())
-    send_mail("[DDS TODAY]: "+", ".join(subj), '\n'.join(bod), FROM_EMAIL, [to])
+    body.append("---\nThis is a service of Hacker Club.\nTo cancel all notifications, go here:")
+    body.append(prev_sub.unsubscribe_all_link())
+    full_subject = "[DDS TODAY]: "+", ".join(subj)
+    full_body = '\n'.join(bod)
+    send_mail(full_subject, full_body, FROM_EMAIL, [to])
     print 'sent mail to', prev_sub.email
 
-# Subscriptions: [email, food]
 # mimics nested for loops to minimize queries
 for sub in Subscription.objects.all().order_by('email'):
     if prev_sub != None and sub.email != prev_sub.email:
@@ -31,11 +30,13 @@ for sub in Subscription.objects.all().order_by('email'):
     items = dds_scrape.isThere(sub.food.encode('utf-8'))
     
     if items:
-        # sorry this is a little hacky/sloppy/whatever
         subject.append(sub.food.lower())
-        body.append("%s! YOUR FAVORITE!" % (sub.food.upper(),))
-        body.extend(["%s @ %s [%s]" %  (food, loc, cat) for food,cat,loc in items])
-        body.append("") #filler line to seperate query terms
+        body.append("%s! YOUR FAVORITE!" % (sub.food.upper()))
+        foods = '\n'.join(["%s @ %s [%s]" %  (food, loc, cat) for food,cat,loc in items])
+        foods = foods.decode('utf-8')
+        print 'matched', foods
+        body.append(foods)
+        body.append("(unsubscribe from this item: %s)\n" % (sub.unsubscribe_link(),))
 
     prev_sub = sub
 

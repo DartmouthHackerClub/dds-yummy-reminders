@@ -113,3 +113,20 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'dds',
 )
+
+# CAS STUFF
+
+AUTHENTICATION_BACKENDS = (
+    'cas_consumer.backends.CASBackend',
+)
+
+LOGIN_URL = '/dds/cas/login/'
+LOGOUT_URL = '/dds/cas/logout/'
+
+CAS_BASE = 'https://login.dartmouth.edu/cas/'
+CAS_SERVICE = 'http://hacktown.cs.dartmouth.edu/dds'
+CAS_NEXT_DEFAULT = 'http://hacktown.cs.dartmouth.edu/dds'
+CAS_COMPLETELY_LOGOUT = True
+CAS_REDIRECT_ON_LOGOUT = 'http://hacktown.cs.dartmouth.edu/dds/bye'
+CAS_LOGOUT_URL = 'https://login.dartmouth.edu/logout.php'
+
