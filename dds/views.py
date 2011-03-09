@@ -25,6 +25,10 @@ def subscribe(request):
                 if item: # ignore empty strings (or purely whitespace strings)
                     s = Subscription()
                     s.food = AUTOCORRECT[item] if item in AUTOCORRECT else item
+                    if last_sub != None and s.food == last_sub.food:
+                        # skip duplicate
+                        continue
+
                     s.email = email
                     s.tag = ''.join([choice(string.letters + string.digits) for i in range(10)])
 
@@ -36,7 +40,7 @@ def subscribe(request):
                     last_sub = s
            
             if last_sub != None: 
-                text.append('\n cancel all subscriptions: %s' % (last_sub.unsubscribe_all_link()))
+                text.append('\ncancel all subscriptions: %s' % (last_sub.unsubscribe_all_link()))
                 send_mail('subscription added', '\n'.join(text), 'hacktown-noreply@hacktown.cs.dartmouth.edu', [email], fail_silently=False)
                 return render_to_response('dds/subscriptions.html', {
                     'form':form,
