@@ -21,11 +21,15 @@ def mail(subj, bod, to):
 
 # mimics nested for loops to minimize queries
 for sub in Subscription.objects.all().order_by('email'):
-    if prev_sub != None and sub.email != prev_sub.email:
-        if body:
-            mail(subject, body, prev_sub.email)
-        body = []
-        subject = []
+    if prev_sub != None:
+        if sub.email != prev_sub.email:
+            if body:
+                mail(subject, body, prev_sub.email)
+            body = []
+            subject = []
+        elif sub.food == prev_sub.food:
+            # duplicate
+            continue
 
     items = dds_scrape.isThere(sub.food.encode('utf-8'))
     

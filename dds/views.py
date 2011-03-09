@@ -27,13 +27,17 @@ def subscribe(request):
                     s.food = AUTOCORRECT[item] if item in AUTOCORRECT else item
                     s.email = email
                     s.tag = ''.join([choice(string.letters + string.digits) for i in range(10)])
+
+#                    if len(Subscription.objects.filter(food=s.food, email=email)) > 0:
+#                        continue
+
                     s.save()
                     text.append('%s (cancel here: %s)' % (s.food.lower(), s.unsubscribe_link())) 
                     last_sub = s
            
             if last_sub != None: 
                 text.append('\n cancel all subscriptions: %s' % (last_sub.unsubscribe_all_link()))
-                send_mail('subscription added', '\n'.join(text), 'hacktown@dartmouth.edu', [email], fail_silently=False)
+                send_mail('subscription added', '\n'.join(text), 'hacktown-noreply@hacktown.cs.dartmouth.edu', [email], fail_silently=False)
                 return render_to_response('dds/subscriptions.html', {
                     'form':form,
                     'comment':'thanks, your subscription was entered',
@@ -42,7 +46,7 @@ def subscribe(request):
         # else if form's invalid or last_sub = None    
         return render_to_response('dds/subscriptions.html', {
             'form':form,
-            'comment':'invalid entry',
+            'comment':'invalid entry - maybe you already subscribed to this stuff?',
         })
     else:
         form = SubscribeForm()

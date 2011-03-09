@@ -1,25 +1,37 @@
 {%extends "base.html"%}
 {%block title%}subscribe{%endblock%}
 
+{%block head%}
+<script>
+function gogo() {
+    document.sform.sbut.disabled = true;
+    document.getElementById("comment").innerHTML = "Loading...";
+    document.sform.submit();
+}
+</script>
+{%endblock%}
+
 {%block header%}Subscribe{%endblock%}
 
 
 {%block content%}
+<div id="comment">
 {%if comment%}
 <p>
 <strong>{{comment}}</strong>
 </p>
 {%endif%}
+</div>
 <p>
 Every night we'll check if DDS is serving something the next day that matches any of your subscriptions.  If so, you'll get an email.  These emails will let you unsubscribe if you're no longer interested.<br/><br/>
 
 You can subscribe to specific items ("General Tso") or general search terms ("Chicken"). Use commas to separate multiple items.
 </p>
 
-<form action="" method="post">
+<form id="sform" name="sform" action="" method="post">
 {{form.as_p}}
 <p>
-<input type="submit" value="Save"/>
+<input id="sbut" name="sbut" type="submit" value="Save" onclick="gogo();" />
 </p>
 </form>
 {%endblock%}
