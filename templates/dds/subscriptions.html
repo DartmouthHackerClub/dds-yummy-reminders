@@ -23,9 +23,9 @@ function gogo() {
 {%endif%}
 </div>
 <p>
-Every night we'll check if DDS is serving something the next day that matches any of your subscriptions.  If so, you'll get an email.  These emails will let you unsubscribe if you're no longer interested.<br/><br/>
+Every night we'll check if DDS is serving something tomorrow that matches your subscriptions.  If so, you'll get an email.  These reminders will let you unsubscribe if you're no longer interested.<br/><br/>
 
-You can subscribe to specific items ("General Tso") or general search terms ("Chicken"). Use commas to separate multiple items.
+You can subscribe to specific items ("General Tso") or general search terms ("Chicken").  Use commas to separate multiple items.
 </p>
 
 <form id="sform" name="sform" action="" method="post">
@@ -34,4 +34,18 @@ You can subscribe to specific items ("General Tso") or general search terms ("Ch
 <input id="sbut" name="sbut" type="submit" value="Save" onclick="gogo();" />
 </p>
 </form>
+<hr/>
+<p>
+Now serving: {{subscriptions.count}} reminders.
+</p>
+{%if favorites%}
+<p>
+    Favorites:
+    <ol>
+    {%for favorite in favorites%}
+        <li>{{favorite.food}}</li>
+    {%endfor%}
+    </ol>
+</p>
+{%endif%}
 {%endblock%}

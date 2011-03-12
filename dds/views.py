@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 
 from dds.forms import DDSForm
 from dds.forms import SubscribeForm
@@ -32,9 +33,6 @@ def subscribe(request):
                     s.email = email
                     s.tag = ''.join([choice(string.letters + string.digits) for i in range(10)])
 
-#                    if len(Subscription.objects.filter(food=s.food, email=email)) > 0:
-#                        continue
-
                     s.save()
                     text.append('%s (cancel here: %s)' % (s.food.lower(), s.unsubscribe_link())) 
                     last_sub = s
@@ -57,6 +55,8 @@ def subscribe(request):
 
     return render_to_response('dds/subscriptions.html', {
         'form':form,
+        'subscriptions':Subscription.objects.all(),
+        'favorites':Subscription.objects.values('food').annotate(Count('food')).order_by('-food__count')[:3],
     })
 
 def unsubscribe(request, email, tag):
