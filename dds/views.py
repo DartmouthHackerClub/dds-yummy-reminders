@@ -43,6 +43,8 @@ def subscribe(request):
                 return render_to_response('dds/subscriptions.html', {
                     'form':form,
                     'comment':'thanks, your subscription was entered',
+                    'subscriptions':Subscription.objects.all(),
+                    'favorites':Subscription.objects.values('food').annotate(Count('food')).order_by('-food__count')[:3],
                 })
         
         # else if form's invalid or last_sub = None    

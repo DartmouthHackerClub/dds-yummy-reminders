@@ -16,14 +16,15 @@ body{
 }
 
 h1{
+    height: 40px;
     border-radius: 5px;
     -moz-border-radius: 5px;
+    background: url(/images/icon_dds_small.png) top left no-repeat #dedede;
     margin: 0;
     border-bottom: 1px gray solid;
-    background-color: #dedede;
-    padding: 0 5px 0 5px;
+    padding: 10px 5px 0 50px;
     color: #454545;
-    
+    vertical-align: middle;
 }
 
 h2{

@@ -36,6 +36,7 @@ You can subscribe to specific items ("General Tso") or general search terms ("Ch
 </form>
 <hr/>
 <p>
+{%if subscriptions%}
 Now serving: {{subscriptions.count}} reminders.
 </p>
 {%if favorites%}
@@ -47,5 +48,6 @@ Now serving: {{subscriptions.count}} reminders.
     {%endfor%}
     </ol>
 </p>
+{%endif%}
 {%endif%}
 {%endblock%}
