@@ -1,6 +1,6 @@
 # Django settings for scrape project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 # path stuff
